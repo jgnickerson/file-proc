@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  file-proc-master:
+    image: local-registry/file-proc-master:latest
+    network_mode: "service:nats"
+    depends_on:
+      - nats
+
+  file-proc-slave:
+    image: local-registry/file-proc-slave:latest
+    network_mode: "service:nats"
+    depends_on:
+      - file-proc-master
+      - nats
+
+  nats:
+    image: nats:latest
+    ports:
+      - 8080
+    command:
+      - -js
+      - -V
